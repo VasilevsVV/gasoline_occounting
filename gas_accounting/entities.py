@@ -1,23 +1,36 @@
-import time
-
+from gas_accounting import utils
 
 class Purchase:
-    def __init__(self, date, amount, price):
+    def __init__(self, date, fuel, price):
         self.date = date
-        self.amount = amount
+        self.fuel = fuel
         self.price = price
-        self.cost = self.amount * self.price
+        self.cost = self.fuel * self.price
 
 
 class Trip:
-    def __init__(self, startDate, endDate, purchaseList):
-        self.purchaseList = purchaseList
-        self.startDate = startDate
-        self.endDate = endDate
+    def __init__(self, start_date, end_date=0):
+        self.start_date = start_date
+        self.end_date = end_date
+        self.fuel = 0
+        self.purchaseList = []
+        self.cost = 0
 
+    def calc_cost_add(self, fuel, price):
+        self.fuel += fuel
+        self.cost += fuel * price
+        return self.cost
 
-def make_time(year, month, day, hours, minutes):
-    return time.mktime((year, month, day, hours, minutes, 0,0,0,0))
+    def add_fuel(self, fuel):
+        self.fuel += fuel
+        return self.fuel
+
+    def add_purchase(self, purchase_id):
+        self.purchaseList.append(purchase_id)
+        return self.purchaseList
+
+    # def get_fuel_from_purchases(self):
+    #     for p in self.purchaseList:
 
 
 
