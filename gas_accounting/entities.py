@@ -25,8 +25,6 @@ class Trip:
         self.fuel += fuel
         return self.fuel
 
-    # def get_fuel_from_purchases(self):
-    #     for p in self.purchaseList:
 
 
 
