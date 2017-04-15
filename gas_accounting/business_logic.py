@@ -6,6 +6,20 @@ class GasolineTable:
 
     def __init__(self):
         self.purchase_table = {}
-        self.trip_table = {}
+        self.trips_table = {}
         self.purchase_ids = 0
         self.trips_ids = 0
+
+    def add_trip(self, start_date, final_date, fuel):
+        trip = entities.Trip(start_date, final_date)
+        trip.fuel = fuel
+        self.trips_table[self.trips_ids] = trip
+        self.trips_ids += 1
+        return self.trips_ids - 1
+
+    def add_trip_consumption(self, start_date, final_date, distance, fuel_per_km):
+        trip = entities.Trip(start_date, final_date)
+        trip.fuel = fuel_per_km * distance
+        self.trips_table[self.trips_ids] = trip
+        self.trips_ids += 1
+        return self.trips_ids - 1
