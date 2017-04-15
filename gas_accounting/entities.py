@@ -1,6 +1,3 @@
-from gas_accounting import utils
-
-
 class Purchase:
     def __init__(self, date, fuel, price):
         self.date = date
@@ -14,7 +11,6 @@ class Trip:
         self.start_date = start_date
         self.end_date = end_date
         self.fuel = 0
-        self.cost = 0
 
     def calc_cost_add(self, fuel, price):
         self.fuel += fuel
@@ -24,7 +20,6 @@ class Trip:
     def add_fuel(self, fuel):
         self.fuel += fuel
         return self.fuel
-
 
 
 
