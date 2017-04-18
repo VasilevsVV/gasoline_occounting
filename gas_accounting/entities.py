@@ -29,6 +29,11 @@ class Trip:
               format(time.strftime("%Y.%m.%d %H:%M", time.localtime(self.start_date)),
                      time.strftime("%Y.%m.%d %H:%M", time.localtime(self.end_date))))
 
+    def get_print(self):
+        return ('Trip\n\tstart date: {}\n\tfinal date: {}'.
+                format(time.strftime("%Y.%m.%d %H:%M", time.localtime(self.start_date)),
+                       time.strftime("%Y.%m.%d %H:%M", time.localtime(self.end_date))))
+
 
 
 
