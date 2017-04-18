@@ -1,3 +1,6 @@
+import time
+
+
 class Purchase:
     def __init__(self, date, fuel, price):
         self.date = date
@@ -14,12 +17,18 @@ class Trip:
 
     def calc_cost_add(self, fuel, price):
         self.fuel += fuel
-        self.cost  += fuel * price
+        self.cost += fuel * price
         return self.cost
 
     def add_fuel(self, fuel):
         self.fuel += fuel
         return self.fuel
+
+    def prints(self):
+        print('Trip\n\tstart date: {}\n\tfinal date: {}'.
+              format(time.strftime("%Y.%m.%d %H:%M", time.localtime(self.start_date)),
+                     time.strftime("%Y.%m.%d %H:%M", time.localtime(self.end_date))))
+
 
 
 
