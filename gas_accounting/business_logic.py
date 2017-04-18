@@ -1,13 +1,24 @@
 from gas_accounting import entities
+import pickle
 
 
 class GasolineTable:
 
     def __init__(self):
-        self.purchase_table = {}
-        self.trips_table = {}
-        self.purchase_ids = 0
-        self.trips_ids = 0
+        try:
+            with open('gas_storage.pickle', 'rb') as f:
+                [self.trips_table, self.trips_ids] = pickle.load(f)
+        except Exception as e:
+            print("{}\nCreating new table.".format(e))
+            self.trips_table = {}
+            self.trips_ids = 0
+
+    def __del__(self):
+        try:
+            with open('gas_storage.pickle', 'wb') as f:
+                pickle.dump([self.trips_table, self.trips_ids], f)
+        except Exception as e:
+            print("Error while dumping table!!!\n{}".format(e))
 
     def add_trip(self, start_date, final_date, fuel):
         trip = entities.Trip(start_date, final_date)
