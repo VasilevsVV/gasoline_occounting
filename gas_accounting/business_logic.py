@@ -24,16 +24,16 @@ class GasolineTable:
         self.trips_ids += 1
         return self.trips_ids - 1
 
-    def delete_trip(self,id):
+    def delete_trip(self, id):
         return self.trips_table.pop(id)
 
-    def list_trips_between_dates(self,start_date,final_date):
+    def list_trips_between_dates(self, start_date, final_date):
         return [val for val in self.trips_table.values()
                 if (val.end_date > start_date > val.start_date or
                     val.end_date > final_date > val.start_date)]
 
-    def list_trips_after_date(self,date):
+    def list_trips_after_date(self, date):
         return [val for val in self.trips_table.values() if (val.end_date > date)]
 
-    def list_trips_before_date(self,date):
+    def list_trips_before_date(self, date):
         return [val for val in self.trips_table.values() if (val.start_date < date)]
