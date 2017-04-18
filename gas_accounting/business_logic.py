@@ -1,5 +1,4 @@
 from gas_accounting import entities
-from gas_accounting import utils
 
 
 class GasolineTable:
@@ -27,10 +26,15 @@ class GasolineTable:
     def delete_trip(self, id):
         return self.trips_table.pop(id)
 
-    def list_trips_between_dates(self, start_date, final_date):
-        return [val for val in self.trips_table.values()
-                if (val.end_date > start_date > val.start_date or
-                    val.end_date > final_date > val.start_date)]
+    def list_trips_between_dates(self, start_date, final_date, strict=False):
+        if strict:
+            return [val for val in self.trips_table.values()
+                    if (val.start_date > start_date and
+                        val.end_date < final_date)]
+        else:
+            return [val for val in self.trips_table.values()
+                    if (val.end_date > start_date > val.start_date or
+                        val.end_date > final_date > val.start_date)]
 
     def list_trips_after_date(self, date):
         return [val for val in self.trips_table.values() if (val.end_date > date)]
