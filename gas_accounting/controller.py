@@ -1,10 +1,14 @@
 from gas_accounting import business_logic
 from gas_accounting import utils
 
+
 class Controller:
 
     def __init__(self):
         self.table = business_logic.GasolineTable()
+
+    def __del__(self):
+        del self.table
 
     def search_command(self, mods, args):
         if len(mods) > 0:
