@@ -36,13 +36,13 @@ class Controller:
 
     def process_console_request(self, command, modifiers, parameters):
         if command.lower() == "search":
-            return search_command(modifiers, parameters)
+            return self.search_command(modifiers, parameters)
         elif command.lower() == "list":
-            return list_command(modifiers, parameters)
+            return self.list_command(modifiers, parameters)
         elif command.lower() == "add":
-            return add_command(modifiers, parameters)
+            return self.add_command(modifiers, parameters)
         elif command.lower() == "delete":
-            return delete_command(modifiers, parameters)
+            return self.delete_command(modifiers, parameters)
         else:
             return "Invalid command: {}".format(command)
 
