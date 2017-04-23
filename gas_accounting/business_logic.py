@@ -37,6 +37,9 @@ class GasolineTable:
     def delete_trip(self, id):
         return self.trips_table.pop(id)
 
+    def get_trip_by_id(self, id):
+        return self.trips_table[id]
+
     def list_all(self):
         return [(key, val) for key, val in self.trips_table.items()]
 
