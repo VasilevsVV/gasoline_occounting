@@ -24,6 +24,12 @@ class Controller:
                 return False
         return True
 
+    @staticmethod
+    def gen_string(lst):
+        str = ""
+        for i in lst:
+            str += "id:{} {}\n".format(i[0], i[1].get_print())
+        return str
 
     def search_command(self, pars, args):
         if len(pars) > 0:
@@ -35,12 +41,15 @@ class Controller:
         else:
             date = utils.parse_time_with_format(args[1])
         res = self.table.search_trips_by_date(date)
-        str = ""
-        for i in res:
-            str += "id:{} {}".format(i[0], i[1].get_print())
-        return str
+        return self.gen_string(res)
 
     def list_command(self, pars, args):
+        if not self.args_test(pars, [0, 2], args, [1, 2]):
+            return "Invalid amount of parameters."
+        if not self.pars_test(pars, ["s", "a", "b"]):
+            return "Invalid parameters."
+        if len(args) == 1 and args[0] == "all":
+            return self.gen_string(self.table.list_all())
         return 1
 
     def add_command(self, pars, args):
@@ -55,9 +64,9 @@ class Controller:
                                             utils.parse_time(args[-1]),
                                             float(args[0]), float(args[1]))
         else:
-            self.table.add_trip(utils.parse_time(args[1]),
+            id = self.table.add_trip(utils.parse_time(args[1]),
                                 utils.parse_time(args[-1]), float(args[0]))
-        return 0
+        return "{} \nAdded.".format(self.table.trips_table[id].get_print())
 
     def delete_command(self, pars, args):
         return 1
