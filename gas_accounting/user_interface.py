@@ -11,7 +11,7 @@ def parse_string(str):
     lst = str.split()
     command = lst.pop(0)
     if lst and lst[0].startswith("-"):
-        params_str = lst.pop()
+        params_str = lst.pop(0)
         params = [ch for ch in params_str[1:len(str)]]
     else:
         params = []

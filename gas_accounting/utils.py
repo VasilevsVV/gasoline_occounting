@@ -8,11 +8,11 @@ def parse_time(string):
     dots = string.count(":")
     try:
         if dots == 4:
-            return time.strptime(string, "%Y:%m:%d:%H:%M")
+            return time.mktime(time.strptime(string, "%Y:%m:%d:%H:%M"))
         elif dots == 3:
-            return time.strptime(string, "%Y:%m:%d:%H")
+            return time.mktime(time.strptime(string, "%Y:%m:%d:%H"))
         elif dots == 2:
-            return time.strptime(string, "%Y:%m:%d")
+            return time.mktime(time.strptime(string, "%Y:%m:%d"))
         else:
             return "Invalid date format"
     except Exception as e:
@@ -21,6 +21,6 @@ def parse_time(string):
 
 def parse_time_with_format(string, format):
     try:
-        return time.strptime(string, format)
+        return time.mktime(time.strptime(string, format))
     except Exception as e:
         return "{}".format(e)
