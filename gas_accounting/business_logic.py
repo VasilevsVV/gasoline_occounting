@@ -37,6 +37,9 @@ class GasolineTable:
     def delete_trip(self, id):
         return self.trips_table.pop(id)
 
+    def list_all(self):
+        return [(key, val) for key, val in self.trips_table.items()]
+
     def list_trips_between_dates(self, start_date, final_date, strict=False):
         if strict:
             return [(key, val) for key, val in self.trips_table.items()
