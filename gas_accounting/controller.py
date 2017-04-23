@@ -50,7 +50,21 @@ class Controller:
             return "Invalid parameters."
         if len(args) == 1 and args[0] == "all":
             return self.gen_string(self.table.list_all())
-        return 1
+        if "s" in pars:
+            strict = True
+        else:
+            strict = False
+        if "a" in pars and "b" not in pars:
+            res = self.table.list_trips_after_date(utils.parse_time(args[0]), strict)
+        elif "b" in pars and "a" not in pars:
+            res = self.table.list_trips_before_date(utils.parse_time(args[0]), strict)
+        elif "a" not in pars and "b" not in pars and len(args) == 2:
+            res = self.table.list_trips_between_dates(utils.parse_time(args[0]),
+                                                      utils.parse_time(args[1]))
+        else:
+            return "Invalid arguments."
+
+        return self.gen_string(res)
 
     def add_command(self, pars, args):
         # raise NotImplementedError

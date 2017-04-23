@@ -53,11 +53,17 @@ class GasolineTable:
                     if (val.end_date > start_date > val.start_date or
                         val.end_date > final_date > val.start_date)]
 
-    def list_trips_after_date(self, date):
-        return [(key, val) for key, val in self.trips_table.items() if (val.end_date > date)]
+    def list_trips_after_date(self, date, strict=False):
+        if strict:
+            return [(key, val) for key, val in self.trips_table.items() if (val.start_date > date)]
+        else:
+            return [(key, val) for key, val in self.trips_table.items() if (val.end_date >= date)]
 
-    def list_trips_before_date(self, date):
-        return [(key, val) for key, val in self.trips_table.items() if (val.start_date < date)]
+    def list_trips_before_date(self, date, strict=False):
+        if strict:
+            return [(key, val) for key, val in self.trips_table.items() if (val.end_date < date)]
+        else:
+            return [(key, val) for key, val in self.trips_table.items() if (val.start_date <= date)]
 
     def search_trips_by_date(self, date):
         return [(key, val) for key, val in self.trips_table.items()
