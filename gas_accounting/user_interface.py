@@ -1,6 +1,6 @@
-#!usr/bin/python3
+#!/usr/bin/python3
 
-from gas_accounting import controller
+import controller
 
 def show_help(category):
     return 1
@@ -31,4 +31,4 @@ def start_console():
             res = parse_string(str)
             print(c.process_console_request(res[0], res[1], res[2]))
 
-start_console()
+# start_console()

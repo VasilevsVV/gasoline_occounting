@@ -1,4 +1,4 @@
-from gas_accounting import entities
+import entities
 import pickle
 
 

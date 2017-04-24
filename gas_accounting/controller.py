@@ -1,5 +1,5 @@
-from gas_accounting import business_logic
-from gas_accounting import utils
+import business_logic
+import utils
 
 
 class Controller:
