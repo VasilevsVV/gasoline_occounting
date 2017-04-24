@@ -67,4 +67,4 @@ class GasolineTable:
 
     def search_trips_by_date(self, date):
         return [(key, val) for key, val in self.trips_table.items()
-                if (val.end_date > date > val.start_date)]
+                if (val.end_date >= date >= val.start_date)]

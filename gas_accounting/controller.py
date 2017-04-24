@@ -39,7 +39,7 @@ class Controller:
         if len(args) == 1:
             date = utils.parse_time(args[0])
         else:
-            date = utils.parse_time_with_format(args[1])
+            date = utils.parse_time_with_format(args[0], args[1])
         res = self.table.search_trips_by_date(date)
         return self.gen_string(res)
 
@@ -83,7 +83,17 @@ class Controller:
         return "{} \nAdded.".format(self.table.trips_table[id].get_print())
 
     def delete_command(self, pars, args):
-        return 1
+        if not self.args_test(pars, [0], args, [1]):
+            return "Invalid amount of parameters."
+        if not self.pars_test(pars, []):
+            return "Invalid parameters."
+        try:
+            res = self.table.delete_trip(int(args[0]))
+        except KeyError as e:
+            return "There is no trip with id:{}".format(e)
+        except Exception as e:
+            return "{}".format(e)
+        return "Deleted {}".format(res.get_print())
 
     def process_console_request(self, command, modifiers, parameters):
         if command.lower() == "search":
