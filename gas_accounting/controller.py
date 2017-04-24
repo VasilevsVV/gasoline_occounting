@@ -103,16 +103,24 @@ class Controller:
             return "{}".format(e)
         return "Deleted {}".format(res.get_print())
 
+    def gas_command(self, pars, args):
+        raise NotImplementedError
+
     def process_console_request(self, command, modifiers, parameters):
-        if command.lower() == "search":
-            return self.search_command(modifiers, parameters)
-        elif command.lower() == "list":
-            return self.list_command(modifiers, parameters)
-        elif command.lower() == "add":
-            return self.add_command(modifiers, parameters)
-        elif command.lower() == "delete":
-            return self.delete_command(modifiers, parameters)
-        else:
-            return "Invalid command: {}".format(command)
+        try:
+            if command.lower() == "search":
+                return self.search_command(modifiers, parameters)
+            elif command.lower() == "list":
+                return self.list_command(modifiers, parameters)
+            elif command.lower() == "add":
+                return self.add_command(modifiers, parameters)
+            elif command.lower() == "delete":
+                return self.delete_command(modifiers, parameters)
+            elif command.lower() == "gas":
+                return self.gas_command(modifiers, parameters)
+            else:
+                return "Invalid command: {}".format(command)
+        except Exception as e:
+            return "{}".format(e)
 
 
