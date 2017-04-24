@@ -36,10 +36,13 @@ class Controller:
             return "Invalid parameters"
         if len(args) < 1 or len(args) > 2:
             return "Invalid arguments"
-        if len(args) == 1:
-            date = utils.parse_time(args[0])
-        else:
-            date = utils.parse_time_with_format(args[0], args[1])
+        try:
+            if len(args) == 1:
+                date = utils.parse_time(args[0])
+            else:
+                date = utils.parse_time_with_format(args[0], args[1])
+        except Exception as e:
+            return "{}".format(e)
         res = self.table.search_trips_by_date(date)
         return self.gen_string(res)
 
@@ -54,16 +57,18 @@ class Controller:
             strict = True
         else:
             strict = False
-        if "a" in pars and "b" not in pars:
-            res = self.table.list_trips_after_date(utils.parse_time(args[0]), strict)
-        elif "b" in pars and "a" not in pars:
-            res = self.table.list_trips_before_date(utils.parse_time(args[0]), strict)
-        elif "a" not in pars and "b" not in pars and len(args) == 2:
-            res = self.table.list_trips_between_dates(utils.parse_time(args[0]),
-                                                      utils.parse_time(args[1]))
-        else:
-            return "Invalid arguments."
-
+        try:
+            if "a" in pars and "b" not in pars:
+                res = self.table.list_trips_after_date(utils.parse_time(args[0]), strict)
+            elif "b" in pars and "a" not in pars:
+                res = self.table.list_trips_before_date(utils.parse_time(args[0]), strict)
+            elif "a" not in pars and "b" not in pars and len(args) == 2:
+                res = self.table.list_trips_between_dates(utils.parse_time(args[0]),
+                                                          utils.parse_time(args[1]))
+            else:
+                return "Invalid arguments."
+        except Exception as e:
+            return "{}".format(e)
         return self.gen_string(res)
 
     def add_command(self, pars, args):
@@ -78,8 +83,11 @@ class Controller:
                                             utils.parse_time(args[-1]),
                                             float(args[0]), float(args[1]))
         else:
-            id = self.table.add_trip(utils.parse_time(args[1]),
-                                utils.parse_time(args[-1]), float(args[0]))
+            try:
+                id = self.table.add_trip(utils.parse_time(args[1]),
+                                    utils.parse_time(args[-1]), float(args[0]))
+            except Exception as e:
+                return "{}".format(e)
         return "{} \nAdded.".format(self.table.trips_table[id].get_print())
 
     def delete_command(self, pars, args):
