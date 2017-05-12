@@ -31,18 +31,20 @@ class Controller:
             str += "id:{} {}\n".format(i[0], i[1].get_print())
         return str
 
+    @staticmethod
+    def test(pars, args, count1, count2, expected_pars):
+        return (self.args_test(pars, count1, args, count2) and
+                self.pars_test(pars, expected_pars))
+
     def search_command(self, pars, args):
         if len(pars) > 0:
             return "Invalid parameters"
         if len(args) < 1 or len(args) > 2:
             return "Invalid arguments"
-        try:
-            if len(args) == 1:
-                date = utils.parse_time(args[0])
-            else:
-                date = utils.parse_time_with_format(args[0], args[1])
-        except Exception as e:
-            return "{}".format(e)
+        if len(args) == 1:
+            date = utils.parse_time(args[0])
+        else:
+            date = utils.parse_time_with_format(args[0], args[1])
         res = self.table.search_trips_by_date(date)
         return self.gen_string(res)
 
@@ -57,18 +59,15 @@ class Controller:
             strict = True
         else:
             strict = False
-        try:
-            if "a" in pars and "b" not in pars:
-                res = self.table.list_trips_after_date(utils.parse_time(args[0]), strict)
-            elif "b" in pars and "a" not in pars:
-                res = self.table.list_trips_before_date(utils.parse_time(args[0]), strict)
-            elif "a" not in pars and "b" not in pars and len(args) == 2:
-                res = self.table.list_trips_between_dates(utils.parse_time(args[0]),
-                                                          utils.parse_time(args[1]))
-            else:
-                return "Invalid arguments."
-        except Exception as e:
-            return "{}".format(e)
+        if "a" in pars and "b" not in pars:
+            res = self.table.list_trips_after_date(utils.parse_time(args[0]), strict)
+        elif "b" in pars and "a" not in pars:
+            res = self.table.list_trips_before_date(utils.parse_time(args[0]), strict)
+        elif "a" not in pars and "b" not in pars and len(args) == 2:
+            res = self.table.list_trips_between_dates(utils.parse_time(args[0]),
+                                                      utils.parse_time(args[1]))
+        else:
+            return "Invalid arguments."
         return self.gen_string(res)
 
     def add_command(self, pars, args):
@@ -83,11 +82,8 @@ class Controller:
                                             utils.parse_time(args[-1]),
                                             float(args[0]), float(args[1]))
         else:
-            try:
-                id = self.table.add_trip(utils.parse_time(args[1]),
-                                    utils.parse_time(args[-1]), float(args[0]))
-            except Exception as e:
-                return "{}".format(e)
+            id = self.table.add_trip(utils.parse_time(args[1]),
+                                utils.parse_time(args[-1]), float(args[0]))
         return "{} \nAdded.".format(self.table.trips_table[id].get_print())
 
     def delete_command(self, pars, args):
@@ -104,7 +100,24 @@ class Controller:
         return "Deleted {}".format(res.get_print())
 
     def gas_command(self, pars, args):
-        raise NotImplementedError
+        if not self.args_test(pars, [0, 2], args, [1, 2]):
+            return "Invalid amount of parameters."
+        if not self.pars_test(pars, ["s", "a", "b"]):
+            return "Invalid parameters."
+        if "s" in pars:
+            strict = True
+        else:
+            strict = False
+        if "a" in pars and "b" not in pars:
+            res = self.table.calculate_gasoline_after_date(utils.parse_time(args[0]), strict)
+        elif "b" in pars and "a" not in pars:
+            res = self.table.calculate_gasoline_before_date(utils.parse_time(args[0]), strict)
+        elif "a" not in pars and "b" not in pars and len(args) == 2:
+            res = self.table.calculate_gasoline_between_dates(utils.parse_time(args[0]),
+                                                              utils.parse_time(args[1]))
+        else:
+            return "Invalid arguments."
+        return res
 
     def process_console_request(self, command, modifiers, parameters):
         try:
