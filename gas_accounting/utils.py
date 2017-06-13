@@ -2,7 +2,8 @@ import time
 
 
 def make_time(year, month, day, hours, minutes):
-    return time.mktime((year, month, day, hours, minutes, 0,0,0,0))
+    return time.mktime((year, month, day, hours, minutes, 0, 0, 0, 0))
+
 
 def parse_time(string):
     dots = string.count(":")
@@ -19,8 +20,8 @@ def parse_time(string):
         return "Error while parsing time:\n\t{}".format(e)
 
 
-def parse_time_with_format(string, format):
+def parse_time_with_format(string, form):
     try:
-        return time.mktime(time.strptime(string, format))
+        return time.mktime(time.strptime(string, form))
     except Exception as e:
         return "{}".format(e)
