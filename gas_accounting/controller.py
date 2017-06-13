@@ -81,9 +81,9 @@ class Controller:
         if not self.pars_test(pars, ["c"]):
             return "Invalid parameters."
         if "c" in pars:
-            self.table.add_trip_consumption(utils.parse_time(args[2]),
-                                            utils.parse_time(args[-1]),
-                                            float(args[0]), float(args[1]))
+            id = self.table.add_trip_consumption(utils.parse_time(args[2]),
+                                                 utils.parse_time(args[-1]),
+                                                 float(args[0]), float(args[1]))
         else:
             id = self.table.add_trip(
                 utils.parse_time(args[1]),
