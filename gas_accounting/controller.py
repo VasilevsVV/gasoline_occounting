@@ -60,12 +60,15 @@ class Controller:
         else:
             strict = False
         if "a" in pars and "b" not in pars:
-            res = self.table.list_trips_after_date(utils.parse_time(args[0]), strict)
+            res = self.table.list_trips_after_date(utils.parse_time(args[0]),
+                                                   strict)
         elif "b" in pars and "a" not in pars:
-            res = self.table.list_trips_before_date(utils.parse_time(args[0]), strict)
+            res = self.table.list_trips_before_date(utils.parse_time(args[0]),
+                                                    strict)
         elif "a" not in pars and "b" not in pars and len(args) == 2:
-            res = self.table.list_trips_between_dates(utils.parse_time(args[0]),
-                                                      utils.parse_time(args[1]))
+            res = self.table.list_trips_between_dates(
+                utils.parse_time(args[0]),
+                utils.parse_time(args[1]))
         else:
             return "Invalid arguments."
         return self.gen_string(res)
@@ -82,8 +85,9 @@ class Controller:
                                             utils.parse_time(args[-1]),
                                             float(args[0]), float(args[1]))
         else:
-            id = self.table.add_trip(utils.parse_time(args[1]),
-                                utils.parse_time(args[-1]), float(args[0]))
+            id = self.table.add_trip(
+                utils.parse_time(args[1]),
+                utils.parse_time(args[-1]), float(args[0]))
         return "{} \nAdded.".format(self.table.trips_table[id].get_print())
 
     def delete_command(self, pars, args):
@@ -109,12 +113,15 @@ class Controller:
         else:
             strict = False
         if "a" in pars and "b" not in pars:
-            res = self.table.calculate_gasoline_after_date(utils.parse_time(args[0]), strict)
+            res = self.table.calculate_gasoline_after_date(
+                utils.parse_time(args[0]), strict)
         elif "b" in pars and "a" not in pars:
-            res = self.table.calculate_gasoline_before_date(utils.parse_time(args[0]), strict)
+            res = self.table.calculate_gasoline_before_date(
+                utils.parse_time(args[0]), strict)
         elif "a" not in pars and "b" not in pars and len(args) == 2:
-            res = self.table.calculate_gasoline_between_dates(utils.parse_time(args[0]),
-                                                              utils.parse_time(args[1]))
+            res = self.table.calculate_gasoline_between_dates(
+                utils.parse_time(args[0]),
+                utils.parse_time(args[1]))
         else:
             return "Invalid arguments."
         return "Total gasoline: {}".format(res)
@@ -135,5 +142,3 @@ class Controller:
                 return "Invalid command: {}".format(command)
         except Exception as e:
             return "{}".format(e)
-
-
