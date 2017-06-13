@@ -25,14 +25,22 @@ class Trip:
         return self.fuel
 
     def prints(self):
-        print('Trip\n\tstart date: {}\n\tfinal date: {}'.
+        print('Trip\n\tstart date: {}\n\tfinal date: {}\n\tgasoline: {}'.
               format(time.strftime("%Y.%m.%d %H:%M", time.localtime(self.start_date)),
-                     time.strftime("%Y.%m.%d %H:%M", time.localtime(self.end_date))))
+                     time.strftime("%Y.%m.%d %H:%M", time.localtime(self.end_date)),
+                     self.fuel))
 
     def get_print(self):
-        return ('Trip\n\tstart date: {}\n\tfinal date: {}'.
+        return ('Trip\n\tstart date: {}\n\tfinal date: {}\n\tgasoline: {}'.
                 format(time.strftime("%Y.%m.%d %H:%M", time.localtime(self.start_date)),
-                       time.strftime("%Y.%m.%d %H:%M", time.localtime(self.end_date))))
+                       time.strftime("%Y.%m.%d %H:%M", time.localtime(self.end_date)),
+                       self.fuel))
+
+    def in_line(self):
+        return ('{}::{}::{}'.
+                format(time.strftime("%Y:%m:%d", time.localtime(self.start_date)),
+                       time.strftime("%Y:%m:%d", time.localtime(self.end_date)),
+                       self.fuel))
 
 
 

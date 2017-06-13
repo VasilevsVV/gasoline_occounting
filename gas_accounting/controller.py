@@ -117,7 +117,7 @@ class Controller:
                                                               utils.parse_time(args[1]))
         else:
             return "Invalid arguments."
-        return res
+        return "Total gasoline: {}".format(res)
 
     def process_console_request(self, command, modifiers, parameters):
         try:
