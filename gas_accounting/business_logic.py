@@ -27,7 +27,8 @@ class GasolineTable:
         self.trips_ids += 1
         return self.trips_ids - 1
 
-    def add_trip_consumption(self, start_date, final_date, distance, fuel_per_km):
+    def add_trip_consumption(self, start_date, final_date,
+                             distance, fuel_per_km):
         trip = entities.Trip(start_date, final_date)
         trip.fuel = fuel_per_km * distance
         self.trips_table[self.trips_ids] = trip
@@ -55,21 +56,26 @@ class GasolineTable:
 
     def list_trips_after_date(self, date, strict=False):
         if strict:
-            return [(key, val) for key, val in self.trips_table.items() if (val.start_date > date)]
+            return [(key, val) for key, val in self.trips_table.items()
+                    if (val.start_date > date)]
         else:
-            return [(key, val) for key, val in self.trips_table.items() if (val.end_date >= date)]
+            return [(key, val) for key, val in self.trips_table.items()
+                    if (val.end_date >= date)]
 
     def list_trips_before_date(self, date, strict=False):
         if strict:
-            return [(key, val) for key, val in self.trips_table.items() if (val.end_date < date)]
+            return [(key, val) for key, val in self.trips_table.items()
+                    if (val.end_date < date)]
         else:
-            return [(key, val) for key, val in self.trips_table.items() if (val.start_date <= date)]
+            return [(key, val) for key, val in self.trips_table.items()
+                    if (val.start_date <= date)]
 
     def search_trips_by_date(self, date):
         return [(key, val) for key, val in self.trips_table.items()
                 if (val.end_date >= date >= val.start_date)]
 
-    def calculate_gasoline_between_dates(self, start_date, final_date, strict=False):
+    def calculate_gasoline_between_dates(self, start_date, final_date,
+                                         strict=False):
         res = 0
         for i in self.list_trips_between_dates(start_date, final_date, strict):
             res += i[1].fuel
@@ -81,7 +87,7 @@ class GasolineTable:
             res += i[1].fuel
         return res
 
-    def calculate_gasoline_before_date(self,date, strict=False):
+    def calculate_gasoline_before_date(self, date, strict=False):
         res = 0
         for i in self.list_trips_before_date(date, strict):
             res += i[1].fuel
