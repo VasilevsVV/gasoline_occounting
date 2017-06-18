@@ -31,10 +31,10 @@ class GasolineTable:
             self.dump()
 
     def __probe_config(self):
-        self.__config.read(utils.home_name() + b'.gasconfig')
-        if 'settings' not in self.__config.sections():
+        self.__config.read(str(utils.home_name() + b'/.gasconfig', 'utf-8'))
+        if 'settings' not in self.__config:
             self.__config['settings'] = {'serialize': 'pickle'}
-            with open(utils.home_name() + b'/.gasconfig', 'w') as f:
+            with open(str(utils.home_name() + b'/.gasconfig', 'utf-8'), 'w') as f:
                 self.__config.write(f)
         return self.__config['settings'].get('serialize', 'pickle')
 

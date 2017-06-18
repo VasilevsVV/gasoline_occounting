@@ -18,6 +18,7 @@ class Serialize:
             file = b'/.gas_storage.yaml'
         else:
             file = b'/.gas_storage.json'
+        print(file)
         return home + file
 
     @staticmethod
@@ -63,21 +64,22 @@ class Serialize:
 
     @staticmethod
     def load_all(method):
-        if method == Serialize.pickle:
-            try:
-                with Serialize.read_file(method) as f:
-                    if method == Serialize.pickle:
-                        table = p.load(f)
-                    elif method == Serialize.yaml:
-                        table = yaml.load(f)
-                    else:
-                        table = js.load(f)
-                    f.close()
-            except:
-                table = {}
-            if table is None:
-                table = {}
-            return table
+        try:
+            with Serialize.read_file(method) as f:
+                if method == Serialize.pickle:
+                    table = p.load(f)
+                elif method == Serialize.yaml:
+                    table = yaml.load(f)
+                else:
+                    table = js.load(f)
+                f.close()
+        except:
+            table = {}
+        if table is None:
+            print('IT IS NONE')
+            table = {}
+        print(table)
+        return table
 
     @staticmethod
     def load(table_name, method):
