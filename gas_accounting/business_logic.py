@@ -2,6 +2,7 @@ import entities
 import utils
 from serialize import Serialize as sr
 import configparser as cp
+import doctest
 
 
 class GasolineTable:
@@ -11,12 +12,11 @@ class GasolineTable:
         """Initializes the GasolineTable class."""
         self.trips_table = {} if test else None
         self.trips_ids = 0
-        self.__loaded = True if test else False
+        self.__loaded = "test" if test else False
         self.__current_table_name = "test" if test else ""
         self.__new_table_name = None
         self.__config = cp.ConfigParser()
-        self.__config.read(utils.home_name() + b'.gasconfig')
-        method = self.__config["settings"].get('serialize', 'pickle')
+        method = self.__probe_config()
         self.__serialize = sr.pickle
         if method == 'pickle':
             self.__serialize = sr.pickle
@@ -27,7 +27,17 @@ class GasolineTable:
 
     def __del__(self):
         """ Saves (dumps) current table when session is over."""
-        self.dump()
+        if not self.__loaded == "test":
+            self.dump()
+
+    def __probe_config(self):
+        self.__config.read(utils.home_name() + b'.gasconfig')
+        settings = self.__config.get('settings', False)
+        if not settings:
+            self.__config['settings'] = {'serialize': 'pickle'}
+            with open(utils.home_name() + b'.gasconfig', 'w') as f:
+                self.__config.write(f)
+        return settings.get('serialize', 'pickle')
 
     def load(self, table_name):
         """Loads a table from storage by name.
@@ -64,7 +74,10 @@ class GasolineTable:
 
     def is_loaded(self):
         """Returns a current state of table
-        (loaded or not)"""
+        (loaded or not)
+        
+        >>> gas.is_loaded()
+        "test" """
         return self.__loaded
 
     def set_new_name(self, new_name):
@@ -201,3 +214,6 @@ class GasolineTable:
         for i in self.list_trips_before_date(date, strict):
             res += i[1].fuel
         return res
+
+if __name__ == "__main__":
+    doctest.testmod(extraglobs={"gas": GasolineTable(test=True)})
