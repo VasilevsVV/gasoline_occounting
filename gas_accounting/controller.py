@@ -25,6 +25,14 @@ class Controller:
         return True
 
     @staticmethod
+    def test(pars, count1, args, count2, expected):
+        if not Controller.args_test(pars, count1, args, count2):
+            return "Invalid amount of parameters."
+        elif not Controller.pars_test(pars, expected)):
+            return "Invalid parameters."
+        return False
+
+    @staticmethod
     def gen_string(lst):
         str = ""
         for i in lst:
@@ -37,10 +45,8 @@ class Controller:
                 self.pars_test(pars, expected_pars))
 
     def search_command(self, pars, args):
-        if len(pars) > 0:
-            return "Invalid parameters"
-        if len(args) < 1 or len(args) > 2:
-            return "Invalid arguments"
+        test = self.test(pars, [0], args, [1, 2], [])
+        if test : return test
         if len(args) == 1:
             date = utils.parse_time(args[0])
         else:
@@ -49,16 +55,11 @@ class Controller:
         return self.gen_string(res)
 
     def list_command(self, pars, args):
-        if not self.args_test(pars, [0, 2], args, [1, 2]):
-            return "Invalid amount of parameters."
-        if not self.pars_test(pars, ["s", "a", "b"]):
-            return "Invalid parameters."
+        test = self.test(pars, [0, 2], args, [1, 2], ["s", "a", "b"])
+        if test : return test
         if len(args) == 1 and args[0] == "all":
             return self.gen_string(self.table.list_all())
-        if "s" in pars:
-            strict = True
-        else:
-            strict = False
+        strict = True if 's' in pars else False
         if "a" in pars and "b" not in pars:
             res = self.table.list_trips_after_date(utils.parse_time(args[0]),
                                                    strict)
@@ -74,10 +75,8 @@ class Controller:
         return self.gen_string(res)
 
     def add_command(self, pars, args):
-        if not self.args_test(pars, [0, 1], args, [2, 3]):
-            return "Invalid amount of parameters."
-        if not self.pars_test(pars, ["c"]):
-            return "Invalid parameters."
+        test = self.test(pars, [0, 1], args, [2, 3], ["c"])
+        if test : return test
         if "c" in pars:
             id = self.table.add_trip_consumption(utils.parse_time(args[2]),
                                                  utils.parse_time(args[-1]),
@@ -89,10 +88,8 @@ class Controller:
         return "{} \nAdded.".format(self.table.trips_table[id].get_print())
 
     def delete_command(self, pars, args):
-        if not self.args_test(pars, [0], args, [1]):
-            return "Invalid amount of parameters."
-        if not self.pars_test(pars, []):
-            return "Invalid parameters."
+        test = self.test(pars, [0], args, [1], [])
+        if test : return test
         try:
             res = self.table.delete_trip(int(args[0]))
         except KeyError as e:
@@ -102,14 +99,9 @@ class Controller:
         return "Deleted {}".format(res.get_print())
 
     def gas_command(self, pars, args):
-        if not self.args_test(pars, [0, 2], args, [1, 2]):
-            return "Invalid amount of parameters."
-        if not self.pars_test(pars, ["s", "a", "b"]):
-            return "Invalid parameters."
-        if "s" in pars:
-            strict = True
-        else:
-            strict = False
+        test = self.test(pars, [0, 2], args, [1, 2], ["s", "a", "b"])
+        if test : return test
+        strict = True if 's' in pars else False
         if "a" in pars and "b" not in pars:
             res = self.table.calculate_gasoline_after_date(
                 utils.parse_time(args[0]), strict)
@@ -125,6 +117,8 @@ class Controller:
         return "Total gasoline: {}".format(res)
 
     def process_console_request(self, command, modifiers, parameters):
+        if not self.table.__loaded:
+            return "Table is not loaded!"
         try:
             if command.lower() == "search":
                 return self.search_command(modifiers, parameters)
