@@ -11,16 +11,32 @@ class Purchase:
 
 class Trip:
     def __init__(self, start_date, end_date=0):
+        """Initializes a trip.
+        Args:
+            start_date:Date when trip begun.
+            end_date:Date when trip ended."""
         self.start_date = start_date
         self.end_date = end_date
         self.fuel = 0
 
     def calc_cost_add(self, fuel, price):
+        """Calculates a cost of all used fuel
+        based on it price.
+        Args:
+            fuel:fuel
+            price:price of the fuel
+        >>> trip.calc_cost_add(50, 10)
+        500"""
         self.fuel += fuel
         self.cost += fuel * price
         return self.cost
 
     def add_fuel(self, fuel):
+        """Adds a new used fuel to already used.
+        Args:
+            fuel:New used fuel.
+        >>> trip.add_fuel(30)
+        80"""
         self.fuel += fuel
         return self.fuel
 
@@ -49,3 +65,6 @@ class Trip:
                 format(self.start_date,
                        self.end_date,
                        self.fuel))
+
+if __name__ == "__main__":
+    doctest.testmod(extraglobs={"trip": Trip(150, 600)})
