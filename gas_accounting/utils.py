@@ -1,4 +1,5 @@
 import time
+import os
 
 
 def make_time(year, month, day, hours, minutes):
@@ -25,3 +26,7 @@ def parse_time_with_format(string, form):
         return time.mktime(time.strptime(string, form))
     except Exception as e:
         return "{}".format(e)
+
+
+def home_name():
+    return dict(os.environb)[b'HOME']

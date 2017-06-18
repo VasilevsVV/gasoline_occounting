@@ -1,6 +1,5 @@
 import json
 import entities as en
-import yaml
 
 
 class JsonSerialize:

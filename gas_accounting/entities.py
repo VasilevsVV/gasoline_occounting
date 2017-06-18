@@ -46,8 +46,6 @@ class Trip:
 
     def in_line(self):
         return ('{}::{}::{}'.
-                format(time.strftime("%Y:%m:%d",
-                                     time.localtime(self.start_date)),
-                       time.strftime("%Y:%m:%d",
-                                     time.localtime(self.end_date)),
+                format(self.start_date,
+                       self.end_date,
                        self.fuel))

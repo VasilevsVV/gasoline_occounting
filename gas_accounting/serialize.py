@@ -1,7 +1,7 @@
 import pickle as p
-import os
 from json_serialize import JsonSerialize as js
 import yaml
+import utils
 
 
 class Serialize:
@@ -11,7 +11,7 @@ class Serialize:
 
     @staticmethod
     def file_name(method):
-        home = dict(os.environb)[b'HOME']
+        home = utils.home_name()
         if method == Serialize.pickle:
             file = b'/.gas_storage.pickle'
         elif method == Serialize.yaml:
