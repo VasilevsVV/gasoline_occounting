@@ -74,6 +74,18 @@ class GasolineTable:
         except Exception as e:
             return "Failed to dump table:\n{}".format(e)
 
+    def delete(self, name=None):
+        if name is None:
+            self.__loaded = False
+            name = (self.__current_table_name if self.__new_table_name
+                is None else self.__new_table_name)
+            sr.delete(name, self.__serialize)
+            self.trips_table = None
+            self.trips_ids = 0
+            return True
+        else:
+            sr.delete(name, self.__serialize)
+
     def is_loaded(self):
         """Returns a current state of table
         (loaded or not)

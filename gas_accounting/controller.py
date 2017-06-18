@@ -28,7 +28,7 @@ class Controller:
     def test(pars, count1, args, count2, expected):
         if not Controller.args_test(pars, count1, args, count2):
             return "Invalid amount of parameters."
-        elif not Controller.pars_test(pars, expected)):
+        elif not Controller.pars_test(pars, expected):
             return "Invalid parameters."
         return False
 
@@ -38,11 +38,6 @@ class Controller:
         for i in lst:
             str += "id:{} {}\n".format(i[0], i[1].get_print())
         return str
-
-    @staticmethod
-    def test(pars, args, count1, count2, expected_pars):
-        return (self.args_test(pars, count1, args, count2) and
-                self.pars_test(pars, expected_pars))
 
     def search_command(self, pars, args):
         test = self.test(pars, [0], args, [1, 2], [])
@@ -116,8 +111,31 @@ class Controller:
             return "Invalid arguments."
         return "Total gasoline: {}".format(res)
 
+    def load(self, pars, args):
+        test = self.test(pars, [0], args, [1], [])
+        if test: return test
+        if self.table.load(args[0]):
+            return "Loaded"
+        else:
+            return "Created new"
+
+    def dump(self, pars, args):
+        test = self.test(pars, [0], args, [0], [])
+        if test: return test
+        self.table.dump()
+
+    def delete(self, pars, args):
+        test = self.test(pars, [0], args, [0, 1], [])
+        if test: return test
+        if len(args) == 1:
+            self.table.delete(args[0])
+            return "Table {} deleted".format(args[0])
+        else:
+            self.table.delete()
+            return "Table deleted"
+
     def process_console_request(self, command, modifiers, parameters):
-        if not self.table.__loaded:
+        if command.lower() != "load" and not self.table.is_loaded():
             return "Table is not loaded!"
         try:
             if command.lower() == "search":
@@ -130,7 +148,14 @@ class Controller:
                 return self.delete_command(modifiers, parameters)
             elif command.lower() == "gas":
                 return self.gas_command(modifiers, parameters)
+            elif command.lower() == "load":
+                return self.load(modifiers, parameters)
+            elif command.lower() == "dump":
+                return self.dump(modifiers, parameters)
+            elif command.lower() == "deltable":
+                return self.delete(modifiers, parameters)
             else:
                 return "Invalid command: {}".format(command)
         except Exception as e:
-            return "{}".format(e)
+            # return "{}".format(e)
+            raise e
