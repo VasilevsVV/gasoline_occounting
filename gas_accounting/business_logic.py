@@ -27,14 +27,30 @@ class GasolineTable:
 
     def __del__(self):
         """ Saves (dumps) current table when session is over."""
-        if self.__new_table_name is not None:
-            sr.delete(self.__current_table_name, self.__serialize)
-            sr.dump(self.__new_table_name, [self.trips_table, self.trips_ids],
-                    self.__serialize)
+        self.dump()
+
+    def load(self, table_name):
+        [self.trips_table, self.trips_ids] = sr.load(table_name,
+                                                     self.__serialize)
+        self.__current_table_name = table_name
+        if self.trips_table.__len__() == 0:
+            return False
         else:
-            sr.dump(self.__current_table_name,
-                    [self.trips_table, self.trips_ids],
-                    self.__serialize)
+            return True
+
+    def dump(self):
+        try:
+            if self.__new_table_name is not None:
+                sr.delete(self.__current_table_name, self.__serialize)
+                sr.dump(self.__new_table_name, [self.trips_table, self.trips_ids],
+                        self.__serialize)
+            else:
+                sr.dump(self.__current_table_name,
+                        [self.trips_table, self.trips_ids],
+                        self.__serialize)
+            return "dumped"
+        except Exception as e:
+            return "Failed to dump table:\n{}".format(e)
 
     def add_trip(self, start_date, final_date, fuel):
         """ Adds a trip to table. 
