@@ -15,13 +15,6 @@ class GasolineTable:
         self.__current_table_name = ""
         self.__new_table_name = None
         self.__dump_type = sr.pickle
-        # try:
-        #     with open('gas_storage.pickle', 'rb') as f:
-        #         [self.trips_table, self.trips_ids] = pickle.load(f)
-        # except Exception as e:
-        #     print("{}\nCreating new table.".format(e))
-        #     self.trips_table = {}
-        #     self.trips_ids = 0
 
     def __del__(self):
         """ Saves (dumps) current table when session is over."""
@@ -30,11 +23,6 @@ class GasolineTable:
             sr.dump(self.__new_table_name, [self.trips_table, self.trips_ids], sr.pickle)
         else:
             sr.dump(self.__current_table_name, [self.trips_table, self.trips_ids], sr.pickle)
-        # try:
-        #     with open('gas_storage.pickle', 'wb') as f:
-        #         pickle.dump([self.trips_table, self.trips_ids], f)
-        # except Exception as e:
-        #     print("Error while dumping table!!!\n{}".format(e))
 
     def add_trip(self, start_date, final_date, fuel):
         """ Adds a trip to table. 
