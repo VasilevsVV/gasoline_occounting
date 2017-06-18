@@ -67,6 +67,11 @@ class GasolineTable:
         (loaded or not)"""
         return self.__loaded
 
+    def set_new_name(self, new_name):
+        self.__new_table_name = new_name
+        return ("Name sett as {}"
+                .format(self.__new_table_name))
+
     def add_trip(self, start_date, final_date, fuel):
         """ Adds a trip to table. 
         Args:
