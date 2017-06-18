@@ -32,19 +32,20 @@ class GasolineTable:
 
     def __probe_config(self):
         self.__config.read(utils.home_name() + b'.gasconfig')
-        settings = self.__config.get('settings', False)
-        if not settings:
+        if 'settings' not in self.__config.sections():
             self.__config['settings'] = {'serialize': 'pickle'}
-            with open(utils.home_name() + b'.gasconfig', 'w') as f:
+            with open(utils.home_name() + b'/.gasconfig', 'w') as f:
                 self.__config.write(f)
-        return settings.get('serialize', 'pickle')
+        return self.__config['settings'].get('serialize', 'pickle')
 
     def load(self, table_name):
         """Loads a table from storage by name.
         And dumps old tale if it was loaded.
         Args:
-            table_name(string): The name of table which 
-            would be loaded."""
+            table_name(string):The name of table which
+            would be loaded.
+        >>> gas.load("name")
+        False"""
         if self.__loaded:
             self.dump()
         [self.trips_table, self.trips_ids] = sr.load(table_name,
@@ -57,12 +58,13 @@ class GasolineTable:
             return True
 
     def dump(self):
-        """Dumps a current table, and deletes 
+        """Dumps a current table, and deletes
         a table with old name if name was changed."""
         try:
             if self.__new_table_name is not None:
                 sr.delete(self.__current_table_name, self.__serialize)
-                sr.dump(self.__new_table_name, [self.trips_table, self.trips_ids],
+                sr.dump(self.__new_table_name, [self.trips_table,
+                                                self.trips_ids],
                         self.__serialize)
             else:
                 sr.dump(self.__current_table_name,
@@ -75,22 +77,34 @@ class GasolineTable:
     def is_loaded(self):
         """Returns a current state of table
         (loaded or not)
-        
         >>> gas.is_loaded()
-        "test" """
+        'test'"""
         return self.__loaded
 
     def set_new_name(self, new_name):
+        """Setts a new name for table.
+        Args:
+            new_name: New name for table.
+        >>> gas.set_new_name('newname')
+        'Name sett as newname'"""
         self.__new_table_name = new_name
         return ("Name sett as {}"
                 .format(self.__new_table_name))
 
     def add_trip(self, start_date, final_date, fuel):
-        """ Adds a trip to table. 
+        """ Adds a trip to table.
         Args:
             start_date(time): Date of trips begin.
             final_date(time): Date of trips end.
-            fuel(number): Amount of spent fuel."""
+            fuel(number): Amount of spent fuel.
+        >>> gas.add_trip(100, 200, 50)
+        0
+        >>> gas.add_trip(150, 200, 70)
+        1
+        >>> gas.add_trip(150, 200, 80)
+        2
+        >>> gas.add_trip(50, 300, 90)
+        3"""
         trip = entities.Trip(start_date, final_date)
         trip.fuel = fuel
         self.trips_table[self.trips_ids] = trip
@@ -104,7 +118,11 @@ class GasolineTable:
             start_date(time): Date of trips begin.
             final_date(time): Date of trips end.
             distance(number): Distance of trip.
-            fuel_per_km(number): fuel/km consumption."""
+            fuel_per_km(number): fuel/km consumption.
+        >>> gas.add_trip_consumption(300, 500, 20, 11)
+        4
+        >>> gas.add_trip_consumption(230, 550, 40, 9)
+        5"""
         trip = entities.Trip(start_date, final_date)
         trip.fuel = fuel_per_km * distance
         self.trips_table[self.trips_ids] = trip
@@ -114,17 +132,23 @@ class GasolineTable:
     def delete_trip(self, id):
         """Deletes trip by id.
         Args:
-            id(integer): Id of trip."""
+            id(integer): Id of trip.
+        >>> gas.delete_trip(2).in_line()
+        '150::200::80'"""
         return self.trips_table.pop(id)
 
     def get_trip_by_id(self, id):
         """ Returns trip by id.
         Args:
-            id(integer): Id of trip."""
+            id(integer): Id of trip.
+        >>> gas.get_trip_by_id(0).in_line()
+        '100::200::50'"""
         return self.trips_table[id]
 
     def list_all(self):
-        """ Returns list of all trips."""
+        """ Returns list of all trips.
+        >>> [(k,v.in_line()) for k,v in gas.list_all()]
+        [(0, '100::200::50'), (1, '150::200::70'), (3, '50::300::90'), (4, '300::500::220'), (5, '230::550::360')]"""
         return [(key, val) for key, val in self.trips_table.items()]
 
     def list_trips_between_dates(self, start_date, final_date, strict=False):
@@ -133,7 +157,11 @@ class GasolineTable:
             start_date(time): minimal date.
             final_date(time): maximal date.
             strict(boolean): if false: trips with dates
-             equal to min or max date would be listed."""
+             equal to min or max date would be listed.
+        >>> [k for k,v in gas.list_trips_between_dates(150, 250)]
+        [0, 3, 5]
+        >>> [k for k,v in gas.list_trips_between_dates(140, 250, True)]
+        [1]"""
         if strict:
             return [(key, val) for key, val in self.trips_table.items()
                     if (val.start_date > start_date and
@@ -148,7 +176,11 @@ class GasolineTable:
         Args:
             date(time): minimal date of trip.
             strict(boolean): if false: trips with dates
-             equal to minimal date would be listed."""
+             equal to minimal date would be listed.
+        >>> [k for k,v in gas.list_trips_after_date(250)]
+        [3, 4, 5]
+        >>> [k for k,v in gas.list_trips_after_date(250, True)]
+        [4]"""
         if strict:
             return [(key, val) for key, val in self.trips_table.items()
                     if (val.start_date > date)]
@@ -161,7 +193,11 @@ class GasolineTable:
         Args:
             date(time): maximal date of trip.
             strict(boolean): if false: trips with dates
-             equal to maximal date would be listed."""
+             equal to maximal date would be listed.
+        >>> [k for k,v in gas.list_trips_before_date(300)]
+        [0, 1, 3, 4, 5]
+        >>> [k for k,v in gas.list_trips_before_date(300, True)]
+        [0, 1]"""
         if strict:
             return [(key, val) for key, val in self.trips_table.items()
                     if (val.end_date < date)]
@@ -173,19 +209,27 @@ class GasolineTable:
         """ Return list of all trips which took place on
         particular date.
         Args:
-            date(time): Date of required trips."""
+            date(time):Date of required trips.
+        >>> [k for k,v in gas.search_trips_by_date(10)]
+        []
+        >>> [k for k,v in gas.search_trips_by_date(400)]
+        []"""
         return [(key, val) for key, val in self.trips_table.items()
                 if (val.end_date >= date >= val.start_date)]
 
     def calculate_gasoline_between_dates(self, start_date, final_date,
                                          strict=False):
-        """ Returns amount of fuel which was spent between 
+        """ Returns amount of fuel which was spent between
         particular dates.
         Args:
             start_date(time): minimal date.
             final_date(time): maximal date.
             strict(boolean): if false: fuel from trips with dates
-             equal to min or max date would be added to sum."""
+             equal to min or max date would be added to sum.
+        >>> gas.calculate_gasoline_between_dates(150, 250)
+        500
+        >>> gas.calculate_gasoline_between_dates(140, 250, True)
+        150"""
         res = 0
         for i in self.list_trips_between_dates(start_date, final_date, strict):
             res += i[1].fuel
@@ -208,7 +252,7 @@ class GasolineTable:
                 particular date.
         Args:
             date(time): maximal date of trips.
-            strict(boolean): if false: fuel from trips with dates 
+            strict(boolean): if false: fuel from trips with dates
                 equal to maximal date would be added to sum."""
         res = 0
         for i in self.list_trips_before_date(date, strict):
