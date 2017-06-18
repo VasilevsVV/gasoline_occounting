@@ -74,8 +74,6 @@ class Controller:
         return self.gen_string(res)
 
     def add_command(self, pars, args):
-        # raise NotImplementedError
-
         if not self.args_test(pars, [0, 1], args, [2, 3]):
             return "Invalid amount of parameters."
         if not self.pars_test(pars, ["c"]):
