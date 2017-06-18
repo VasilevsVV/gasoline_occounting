@@ -7,12 +7,12 @@ import configparser as cp
 class GasolineTable:
     """ Class with main logic.
     Working with trips."""
-    def __init__(self):
+    def __init__(self, test=False):
         """Initializes the GasolineTable class."""
-        self.trips_table = {}
+        self.trips_table = {} if test else None
         self.trips_ids = 0
-        self.__loaded = False
-        self.__current_table_name = ""
+        self.__loaded = True if test else False
+        self.__current_table_name = "test" if test else ""
         self.__new_table_name = None
         self.__config = cp.ConfigParser()
         self.__config.read(utils.home_name() + b'.gasconfig')
@@ -30,15 +30,25 @@ class GasolineTable:
         self.dump()
 
     def load(self, table_name):
+        """Loads a table from storage by name.
+        And dumps old tale if it was loaded.
+        Args:
+            table_name(string): The name of table which 
+            would be loaded."""
+        if self.__loaded:
+            self.dump()
         [self.trips_table, self.trips_ids] = sr.load(table_name,
                                                      self.__serialize)
         self.__current_table_name = table_name
+        self.__loaded = True
         if self.trips_table.__len__() == 0:
             return False
         else:
             return True
 
     def dump(self):
+        """Dumps a current table, and deletes 
+        a table with old name if name was changed."""
         try:
             if self.__new_table_name is not None:
                 sr.delete(self.__current_table_name, self.__serialize)
@@ -51,6 +61,11 @@ class GasolineTable:
             return "dumped"
         except Exception as e:
             return "Failed to dump table:\n{}".format(e)
+
+    def is_loaded(self):
+        """Returns a current state of table
+        (loaded or not)"""
+        return self.__loaded
 
     def add_trip(self, start_date, final_date, fuel):
         """ Adds a trip to table. 
