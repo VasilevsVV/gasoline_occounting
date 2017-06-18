@@ -241,7 +241,11 @@ class GasolineTable:
         Args:
             date(time): minimal date of trips.
             strict(boolean): if false: fuel from trips with dates
-             equal to minimal date would be added to sum."""
+             equal to minimal date would be added to sum.
+        >>> gas.calculate_gasoline_after_date(250)
+        670
+        >>> gas.calculate_gasoline_after_date(250, True)
+        220"""
         res = 0
         for i in self.list_trips_after_date(date, strict):
             res += i[1].fuel
@@ -253,7 +257,11 @@ class GasolineTable:
         Args:
             date(time): maximal date of trips.
             strict(boolean): if false: fuel from trips with dates
-                equal to maximal date would be added to sum."""
+                equal to maximal date would be added to sum.
+        >>> gas.calculate_gasoline_before_date(300)
+        870
+        >>> gas.calculate_gasoline_before_date(300, True)
+        200"""
         res = 0
         for i in self.list_trips_before_date(date, strict):
             res += i[1].fuel
