@@ -1,5 +1,6 @@
 import json
-from gas_accounting import entities as en
+import entities as en
+import yaml
 
 
 class JsonSerialize:
@@ -44,7 +45,6 @@ class JsonSerialize:
     def dump(data, file):
         json.dump(data, file, default=JsonSerialize.encode_trip)
 
-    # @staticmethod
-    # def load(file):
-
-
+    @staticmethod
+    def load(file):
+        return JsonSerialize.decode_tables(json.load(file))
