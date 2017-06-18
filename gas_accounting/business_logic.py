@@ -1,7 +1,7 @@
 import entities
-import pickle
 import utils
 from serialize import Serialize as sr
+import configparser as cp
 
 
 class GasolineTable:
@@ -14,15 +14,27 @@ class GasolineTable:
         self.__loaded = False
         self.__current_table_name = ""
         self.__new_table_name = None
-        self.__dump_type = sr.pickle
+        self.__config = cp.ConfigParser()
+        self.__config.read(utils.home_name() + b'.gasconfig')
+        method = self.__config["settings"].get('serialize', 'pickle')
+        self.__serialize = sr.pickle
+        if method == 'pickle':
+            self.__serialize = sr.pickle
+        elif method == 'json':
+            self.__serialize = sr.json
+        elif method == 'yaml':
+            self.__serialize = sr.yaml
 
     def __del__(self):
         """ Saves (dumps) current table when session is over."""
         if self.__new_table_name is not None:
-            sr.delete(self.__current_table_name, sr.pickle)
-            sr.dump(self.__new_table_name, [self.trips_table, self.trips_ids], sr.pickle)
+            sr.delete(self.__current_table_name, self.__serialize)
+            sr.dump(self.__new_table_name, [self.trips_table, self.trips_ids],
+                    self.__serialize)
         else:
-            sr.dump(self.__current_table_name, [self.trips_table, self.trips_ids], sr.pickle)
+            sr.dump(self.__current_table_name,
+                    [self.trips_table, self.trips_ids],
+                    self.__serialize)
 
     def add_trip(self, start_date, final_date, fuel):
         """ Adds a trip to table. 
