@@ -24,6 +24,10 @@ class Trip:
         self.fuel += fuel
         return self.fuel
 
+    def set_fuel(self, fuel):
+        self.fuel = fuel
+        return self.fuel
+
     def prints(self):
         print('Trip\n\tstart date: {}\n\tfinal date: {}\n\tgasoline: {}'.
               format(time.strftime("%Y.%m.%d %H:%M",
