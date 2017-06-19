@@ -6,6 +6,7 @@ import pickle
 import json
 import yaml
 
+
 class SerializeTests(unittest.TestCase):
 
     def setUp(self):

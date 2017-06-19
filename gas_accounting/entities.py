@@ -20,32 +20,31 @@ class Trip:
         self.end_date = end_date
         self.fuel = 0
 
-    def calc_cost_add(self, fuel, price):
-        """Calculates a cost of all used fuel
-        based on it price.
-        Args:
-            fuel:fuel
-            price:price of the fuel
-        >>> trip.calc_cost_add(50, 10)
-        500"""
-        self.fuel += fuel
-        self.cost += fuel * price
-        return self.cost
-
     def add_fuel(self, fuel):
         """Adds a new used fuel to already used.
         Args:
             fuel:New used fuel.
         >>> trip.add_fuel(30)
-        80"""
+        30"""
         self.fuel += fuel
         return self.fuel
 
     def set_fuel(self, fuel):
+        """Sets trip.fuel to new value.
+        Args:
+            fuel:New value
+        >>> trip.set_fuel(125)
+        125"""
         self.fuel = fuel
         return self.fuel
 
     def prints(self):
+        """Prints a trip to console.
+        >>> trip.prints()
+        Trip
+            start date: 1970.01.01 03:02
+            final date: 1970.01.01 03:10
+            gasoline: 30"""
         print('Trip\n\tstart date: {}\n\tfinal date: {}\n\tgasoline: {}'.
               format(time.strftime("%Y.%m.%d %H:%M",
                                    time.localtime(self.start_date)),
@@ -54,6 +53,9 @@ class Trip:
                      self.fuel))
 
     def get_print(self):
+        """Returns string with printed trip to it.
+        >>> trip.get_print()
+        'Trip\\n\\tstart date: 1970.01.01 03:02\\n\\tfinal date: 1970.01.01 03:10\\n\\tgasoline: 30'"""
         return ('Trip\n\tstart date: {}\n\tfinal date: {}\n\tgasoline: {}'.
                 format(time.strftime("%Y.%m.%d %H:%M",
                                      time.localtime(self.start_date)),
@@ -62,6 +64,9 @@ class Trip:
                        self.fuel))
 
     def in_line(self):
+        """Returns trip in one line.
+        >>> trip.in_line()
+        '150::600::30'"""
         return ('{}::{}::{}'.
                 format(self.start_date,
                        self.end_date,

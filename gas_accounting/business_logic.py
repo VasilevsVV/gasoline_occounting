@@ -16,7 +16,7 @@ class GasolineTable:
         self.__current_table_name = "test" if test else ""
         self.__new_table_name = None
         self.__config = cp.ConfigParser()
-        method = self.__probe_config()
+        method = self.__probe_config__()
         self.__serialize = sr.pickle
         if method == 'pickle':
             self.__serialize = sr.pickle
@@ -30,9 +30,12 @@ class GasolineTable:
         if not self.__loaded == "test":
             self.dump()
 
-    def __probe_config(self):
+    def __probe_config__(self):
+        """Tries to parse config file.
+        >>> gas.__probe_config__()
+        'pickle'"""
         self.__config.read(str(utils.home_name() + b'/.gasconfig', 'utf-8'))
-        if 'settings' not in self.__config:
+        if 'settings' not in self.__config or self.__loaded == "test":
             self.__config['settings'] = {'serialize': 'pickle'}
             with open(str(utils.home_name() + b'/.gasconfig', 'utf-8'), 'w') as f:
                 self.__config.write(f)
