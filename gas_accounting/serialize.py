@@ -18,7 +18,6 @@ class Serialize:
             file = b'/.gas_storage.yaml'
         else:
             file = b'/.gas_storage.json'
-        print(file)
         return home + file
 
     @staticmethod
@@ -76,9 +75,7 @@ class Serialize:
         except:
             table = {}
         if table is None:
-            print('IT IS NONE')
             table = {}
-        print(table)
         return table
 
     @staticmethod
