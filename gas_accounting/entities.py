@@ -1,4 +1,5 @@
 import time
+import doctest
 
 
 class Purchase:

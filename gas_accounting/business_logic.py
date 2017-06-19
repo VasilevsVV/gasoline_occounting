@@ -74,18 +74,6 @@ class GasolineTable:
         except Exception as e:
             return "Failed to dump table:\n{}".format(e)
 
-    def delete(self, name=None):
-        if name is None:
-            self.__loaded = False
-            name = (self.__current_table_name if self.__new_table_name
-                is None else self.__new_table_name)
-            sr.delete(name, self.__serialize)
-            self.trips_table = None
-            self.trips_ids = 0
-            return True
-        else:
-            sr.delete(name, self.__serialize)
-
     def is_loaded(self):
         """Returns a current state of table
         (loaded or not)
@@ -278,6 +266,24 @@ class GasolineTable:
         for i in self.list_trips_before_date(date, strict):
             res += i[1].fuel
         return res
+
+    def delete(self, name=None):
+        """Deletes a current table if name not spesified,
+        or deletes a table srom storageby name
+        Args:
+            name:Name of table to delete.
+        >>> gas.delete("some_name")
+        False"""
+        if name is None:
+            self.__loaded = False
+            name = (self.__current_table_name if self.__new_table_name
+                is None else self.__new_table_name)
+            sr.delete(name, self.__serialize)
+            self.trips_table = None
+            self.trips_ids = 0
+            return True
+        else:
+            return sr.delete(name, self.__serialize)
 
 if __name__ == "__main__":
     doctest.testmod(extraglobs={"gas": GasolineTable(test=True)})
