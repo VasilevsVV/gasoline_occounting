@@ -33,10 +33,19 @@ class JsonSerialize:
             if "start_date" and "end_date" and "fuel" in tables.keys():
                 return JsonSerialize.decode_trip(tables)
             else:
-                return {k: JsonSerialize.decode_tables(v)
+                return {JsonSerialize.decode_tables(k):
+                        JsonSerialize.decode_tables(v)
                         for k, v in tables.items()}
         elif type(tables) is list:
             return [JsonSerialize.decode_tables(val) for val in tables]
+        elif type(tables) is str:
+            if tables.isdecimal():
+                return int(tables)
+            else:
+                try:
+                    return float(tables)
+                except:
+                    return tables
         else:
             return tables
 

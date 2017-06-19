@@ -66,5 +66,10 @@ class Trip:
                        self.end_date,
                        self.fuel))
 
+    def __eq__(self, other):
+        return (self.start_date == other.start_date and
+                self.end_date == other.end_date and
+                self.fuel == other.fuel)
+
 if __name__ == "__main__":
     doctest.testmod(extraglobs={"trip": Trip(150, 600)})
