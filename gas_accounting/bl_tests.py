@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import patch
 from business_logic import GasolineTable
-from entities import Trip
 from serialize import Serialize as sr
 
 
