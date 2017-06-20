@@ -8,6 +8,7 @@ import yaml
 
 
 class SerializeTests(unittest.TestCase):
+    """Module with tests for serializations."""
 
     def setUp(self):
         table = bl.GasolineTable(test=True)

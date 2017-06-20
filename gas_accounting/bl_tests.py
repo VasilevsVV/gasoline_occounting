@@ -6,6 +6,7 @@ from serialize import Serialize as sr
 
 
 class BusinessLogicTests(unittest.TestCase):
+    """Module with tests for business logic."""
 
     def setUp(self):
         self.gas = GasolineTable(test=True)
