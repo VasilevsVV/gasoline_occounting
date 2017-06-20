@@ -187,8 +187,8 @@ class GasolineTable:
                         val.end_date < final_date)]
         else:
             return [(key, val) for key, val in self.trips_table.items()
-                    if (val.end_date > start_date > val.start_date or
-                        val.end_date > final_date > val.start_date)]
+                    if ((val.end_date >= start_date) or
+                        (final_date >= val.start_date))]
 
     def list_trips_after_date(self, date, strict=False):
         """ Return list of all trips after particular date.
