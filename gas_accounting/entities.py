@@ -77,5 +77,11 @@ class Trip:
                 self.end_date == other.end_date and
                 self.fuel == other.fuel)
 
+    def __repr__(self):
+        return ('{}::{}::{}'.
+                format(self.start_date,
+                       self.end_date,
+                       self.fuel))
+
 if __name__ == "__main__":
     doctest.testmod(extraglobs={"trip": Trip(150, 600)})
