@@ -30,6 +30,12 @@ class GasolineTable:
         if not self.__loaded == "test":
             self.dump()
 
+    def current_table_name(self):
+        return self.__current_table_name
+
+    def new_table_name(self):
+        return self.__new_table_name
+
     def __probe_config__(self):
         """Tries to parse config file.
         >>> gas.__probe_config__()
@@ -76,6 +82,16 @@ class GasolineTable:
             return "dumped"
         except Exception as e:
             return "Failed to dump table:\n{}".format(e)
+
+    def set_serialize(self, serialize):
+        """Setts serialize to new value.
+        Args:
+            serialize: New __serialize value"""
+        self.__serialize = serialize
+
+    def get_serialize(self):
+        """Returns current serialize"""
+        return self.__serialize
 
     def is_loaded(self):
         """Returns a current state of table
