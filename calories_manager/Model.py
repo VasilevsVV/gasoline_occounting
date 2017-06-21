@@ -47,6 +47,7 @@ class Model():
         Product(productName=name, energyPoints=energy_points, date=date)
 
     def remove_product(self, product_name):
+        """ Remove product from database """
         now = datetime.datetime.now()
         date = "{}-{}-{}".format(now.year, now.month, now.day)
         if not self._is_product_exists(product_name, date):
@@ -56,12 +57,14 @@ class Model():
         Product.delete(item.id)
 
     def detailed_info(self, day):
+        """ Get datailed info """
         date = "{}-{}-{}".format(day['year'], day['month'], day['day'])
         items = Product.select(Product.q.date == date)
         total = self.total(day)
         return (items, total)
 
     def _query(self, kwargs):
+        """ Get products filtered by date. """
         if len(kwargs) == 3:
             date = "{}-{}-{}".format(kwargs['year'], kwargs['month'], kwargs['day'])
             products = Product.select(Product.q.date == date)
@@ -77,17 +80,19 @@ class Model():
         return products
 
     def current_product_list(self):
+        """ Get products list """
         now = datetime.datetime.now()
         return self._query(dict((("year", now.year), ("month", now.month), ("day", now.day))))
 
     def total(self, kwargs):
+        """ Calculate calories """
         products = self._query(kwargs)
         if list(products) == []:
             raise Exception("Sorry, but you do not have such records.")
         return reduce(lambda x, y: x.energyPoints + y.energyPoints, products) if len(list(products)) > 1\
                                                                             else products[0].energyPoints
 
-    def should_consume(self):
+    def should_consume(self):   
         user = User.select()[0]
         if user.gender == 'male':
             return (66.5 + 13.75 * user.weight + 5.003 * user.height - 6.775 * user.age)\
