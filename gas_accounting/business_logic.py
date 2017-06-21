@@ -177,8 +177,8 @@ class GasolineTable:
             final_date(time): maximal date.
             strict(boolean): if false: trips with dates
              equal to min or max date would be listed.
-        >>> [k for k,v in gas.list_trips_between_dates(150, 250)]
-        [0, 3, 5]
+        >>> [k for k,v in gas.list_trips_between_dates(150, 180)]
+        [0, 1, 3, 4, 5]
         >>> [k for k,v in gas.list_trips_between_dates(140, 250, True)]
         [1]"""
         if strict:
@@ -246,7 +246,7 @@ class GasolineTable:
             strict(boolean): if false: fuel from trips with dates
              equal to min or max date would be added to sum.
         >>> gas.calculate_gasoline_between_dates(150, 250)
-        500
+        870
         >>> gas.calculate_gasoline_between_dates(140, 250, True)
         150"""
         res = 0
@@ -296,7 +296,7 @@ class GasolineTable:
         if name is None:
             self.__loaded = False
             name = (self.__current_table_name if self.__new_table_name
-                is None else self.__new_table_name)
+                    is None else self.__new_table_name)
             sr.delete(name, self.__serialize)
             self.trips_table = None
             self.trips_ids = 0

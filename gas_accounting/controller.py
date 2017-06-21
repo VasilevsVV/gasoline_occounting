@@ -1,11 +1,11 @@
-import business_logic
+from business_logic import GasolineTable
 import utils
 
 
 class Controller:
 
     def __init__(self):
-        self.table = business_logic.GasolineTable()
+        self.table = GasolineTable()
 
     def __del__(self):
         del self.table
@@ -50,7 +50,8 @@ class Controller:
     def search_command(self, pars, args):
         """Command for search trip in table."""
         test = self.test(pars, [0], args, [1, 2], [])
-        if test : return test
+        if test:
+            return test
         if len(args) == 1:
             date = utils.parse_time(args[0])
         else:
@@ -61,7 +62,8 @@ class Controller:
     def list_command(self, pars, args):
         """Command for list trips from table."""
         test = self.test(pars, [0, 2], args, [1, 2], ["s", "a", "b"])
-        if test : return test
+        if test:
+            return test
         if len(args) == 1 and args[0] == "all":
             return self.gen_string(self.table.list_all())
         strict = True if 's' in pars else False
@@ -82,7 +84,8 @@ class Controller:
     def add_command(self, pars, args):
         """Command for adding trip to table"""
         test = self.test(pars, [0, 1], args, [2, 3], ["c"])
-        if test : return test
+        if test:
+            return test
         if "c" in pars:
             id = self.table.add_trip_consumption(utils.parse_time(args[2]),
                                                  utils.parse_time(args[-1]),
@@ -96,7 +99,8 @@ class Controller:
     def delete_command(self, pars, args):
         """Command for deleting trip from table."""
         test = self.test(pars, [0], args, [1], [])
-        if test : return test
+        if test:
+            return test
         try:
             res = self.table.delete_trip(int(args[0]))
         except KeyError as e:
@@ -108,7 +112,8 @@ class Controller:
     def gas_command(self, pars, args):
         """Command for calculating spent gasoline."""
         test = self.test(pars, [0, 2], args, [1, 2], ["s", "a", "b"])
-        if test : return test
+        if test:
+            return test
         strict = True if 's' in pars else False
         if "a" in pars and "b" not in pars:
             res = self.table.calculate_gasoline_after_date(
@@ -127,7 +132,8 @@ class Controller:
     def load(self, pars, args):
         """Command for loading some table."""
         test = self.test(pars, [0], args, [1], [])
-        if test: return test
+        if test:
+            return test
         if self.table.load(args[0]):
             return "Loaded"
         else:
@@ -143,7 +149,8 @@ class Controller:
     def delete(self, pars, args):
         """Command for deleting table from storage."""
         test = self.test(pars, [0], args, [0, 1], [])
-        if test: return test
+        if test:
+            return test
         if len(args) == 1:
             self.table.delete(args[0])
             return "Table {} deleted".format(args[0])
@@ -164,21 +171,8 @@ class Controller:
                 return self.add_command(modifiers, parameters)
             else:
                 return self.command_processor1(command, modifiers, parameters)
-            # elif command.lower() == "delete":
-            #     return self.delete_command(modifiers, parameters)
-            # elif command.lower() == "gas":
-            #     return self.gas_command(modifiers, parameters)
-            # elif command.lower() == "load":
-            #     return self.load(modifiers, parameters)
-            # elif command.lower() == "dump":
-            #     return self.dump(modifiers, parameters)
-            # elif command.lower() == "deltable":
-            #     return self.delete(modifiers, parameters)
-            # else:
-            #     return "Invalid command: {}".format(command)
         except Exception as e:
-            # return "{}".format(e)
-            raise e
+            return "{}".format(e)
 
     def command_processor1(self, command, modifiers, parameters):
         if command.lower() == "delete":

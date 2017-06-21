@@ -131,4 +131,3 @@ class Serialize:
             return True
         except:
             return False
-
