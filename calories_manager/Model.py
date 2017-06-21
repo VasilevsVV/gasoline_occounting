@@ -1,6 +1,9 @@
 import datetime
+from dateutil.relativedelta import relativedelta
+from functools import reduce
 from User import User
 from Product import Product
+import sqlobject
 
 
 class Model():
@@ -84,3 +87,18 @@ class Model():
         return reduce(lambda x, y: x.energyPoints + y.energyPoints, products) if len(list(products)) > 1\
                                                                             else products[0].energyPoints
 
+    def should_consume(self):
+        user = User.select()[0]
+        if user.gender == 'male':
+            return (66.5 + 13.75 * user.weight + 5.003 * user.height - 6.775 * user.age)\
+                    * user.activity
+        return (655.1 + 9.563 * user.weight + 1.85 * user.height - 4.676 * user.age) * user.activity
+
+    def _is_user_exists(self):
+        number = User.select().count()
+        return True if number > 0 else False
+
+    def _is_product_exists(self, product_name, date):
+        number = Product.select(sqlobject.AND(Product.q.productName == product_name,\
+                                              Product.q.date == date)).count()
+        return True if number > 0 else False

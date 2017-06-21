@@ -7,7 +7,7 @@ from configuration.configParser import *
 def establish_connection():
     """ Connect to the database """
     res_dict = config_parser_result()
-    conn None
+    conn = None
     if res_dict[save_type_key] == "mysql":
         connection_str = "mysql://root:password@127.0.0.1/testdb"
         conn = sqlobject.connectionForURI(connection_str)
