@@ -1,0 +1,3 @@
+# Database types: MySql, SQLlite, PostqresSql
+# save_type values: mysql, sqll, psql
+save_type=sqll
